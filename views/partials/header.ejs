@@ -1,0 +1,141 @@
+<!-- <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-2 shadow"> -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark py-2 shadow">
+  <div class="container">
+    <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="/">HTTP Basic Authentication</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav px-3 ml-auto">
+        
+        
+        <li class="nav-item ">
+          <a class="nav-link" href="/users">Protected Route</a>
+        </li>
+        <%if (isLoggedIn) { %>
+          <li class="nav-item ">
+            <button class="btn btn-primary" href="" id="logout">Logout</button>
+          </li>
+        <% } else {%>
+          <li class="nav-item ">
+            <a class="btn btn-primary" href="/login">Sign In</a>
+          </li>
+        <% } %>
+        
+        
+
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Include jQuery to try one of the logout solutions -->
+<script
+			  src="https://code.jquery.com/jquery-3.5.1.min.js"
+			  integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+			  crossorigin="anonymous"></script>
+
+<script>
+  
+  const logoutLink = document.getElementById("logout");
+  logout.addEventListener("click", handleLogoutClick)
+  // // following does not work on firefox. Works on chrome. 
+  // // But a good way to headers to a fetch request. 
+  // function handleLogoutClick() {
+  
+  // let username = 'admin';
+  // let password = 'passwd';
+  // // let url = `http://${username}:${password}@localhost:3000/users`; // cannot do this
+  // let url = `http://localhost:3000/users`; // url cannot have credentials
+
+
+  // let headers = new Headers();
+  // headers.append('Content-Type', 'text/json');
+  // headers.set('Authorization', 'Basic ' + btoa(username + ":" + password));
+
+  // fetch(url, {method:'GET',
+  //         headers: headers,
+  //         // credentials: 'user:passwd'
+  //       })
+  // // fetch(url)
+  // .then(response => {
+  //   if (!response.ok) throw new Error(response.status);
+  //   return response.json();})
+  // .then(data => {console.log("Data is", data)})
+  // .catch(err => {console.log("Error is", err)})
+
+  // }
+
+  // // Following does not work on firefox. Works on chrome
+  // function handleLogoutClick(e) {
+  //   e.preventDefault();
+  //   const url = 'http://localhost:3000/users'
+  //   var xhttp = new XMLHttpRequest(); 
+  //   xhttp.open("GET", url, true); 
+  //   xhttp.setRequestHeader('Authorization', 'Basic '); 
+  //   xhttp.users = undefined;
+  //   xhttp.send();
+  //   try {
+  //           document.execCommand("ClearAuthenticationCache");
+  //           window.location.href('/logout.html'); // page with logout message somewhere in not protected directory
+  //       } catch (exception) {
+  //         console.log("Cache did not clear");
+  //       }
+  // }
+
+  // using jQuery (this works for both chrome and firefox)
+  function handleLogoutClickjQuery(e) {
+    console.log("jQuery is", $);
+    const url = 'http://localhost:3000/users'
+    $.ajax({
+        type: "GET",
+        url: url,
+        dataType: 'json',
+        async: true,
+        username: "randomUser",
+        password: "randomPassword",
+        // data: '{ "comment" }'
+    })
+//In our case, we WANT to get access denied, so a success would be a failure.
+.done(function(){
+    alert('Error!')
+})
+//Likewise, a failure *usually* means we succeeded.
+//set window.location to redirect the user to wherever you want them to go
+.fail(function(){
+    window.location = "/";
+    });
+
+  }
+
+  // function handleLogoutClick() {
+  //   const url = 'http://localhost:3000/users'
+  //   const login = 'fakeUser';
+  //   const pass = 'randomPassword';
+  //   var http = new XMLHttpRequest();						
+	// 					http.open("get", url, false, login, pass);
+	// 					http.send("");
+	// 					if (http.status == 200) {
+	// 						alert("OK. You now established a session. You can navigate to the URL.");
+	// 					} else {
+	// 						alert("⚠️ Authentication failed.");
+	// 					}	
+  // }
+
+  function handleLogoutClick() {
+    const url = 'http://localhost:3000/users'
+    const login = 'fakeUser';
+    const pass = 'randomPassword';
+    var http = new XMLHttpRequest();						
+						http.open("get", url, false, login, pass);
+						http.send("");
+						if (http.status === 401) {
+              alert("You're logged out now");
+              window.location.href = "/";
+						} else {
+							alert("Logout failed");
+						}	
+  }
+
+</script>

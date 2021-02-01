@@ -1,0 +1,88 @@
+<%- include('../partials/head') -%>
+
+<%- include('../partials/header') -%>
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h1">Basic Authentication</h1>
+</div>
+<div class="row">
+
+  <div class="col-md-6 offset-md-3">
+    <%- include('../partials/flash-msg') -%>
+    <h2 class="h2 mt-5"><%= title %></h2>
+    <form id="login-form">
+      <div class="form-group">
+        <label for="username">Username:</label>
+        <input class="form-control" type="text" name="username" id="username" placeholder="username">
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input class="form-control" type="password" name="password" id="password" placeholder="Password">
+      </div>
+      <button class="btn btn-primary" type="submit">Submit</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  function userForm() {
+    const loginForm = document.getElementById('login-form');
+    loginForm.addEventListener("submit", handleFormSubmit)
+    function handleFormSubmit(e) {
+      // let base64 = require('base-64');
+      e.preventDefault();
+      
+      const formData = new FormData(document.querySelector('form'));
+      const formObject = {}
+      for (let pair of formData.entries()) {
+        formObject[pair[0]] = pair[1];
+      }
+      console.log(formObject);
+      const {username, password} = formObject;
+      const url = 'http://localhost:3000/users';
+
+      var http = new XMLHttpRequest();						
+              http.open("get", url, false, username, password);
+              http.send("");
+              if (http.status == 200) {
+                alert("OK. You're now logged in'");
+                window.location.href = url;
+              } else {
+                alert("⚠️ Authentication failed.");
+              }	
+    
+      // let headers = new Headers();
+      // // headers.append('Content-Type', 'text/json');
+      // headers.set('Authorization', 'Basic ' + btoa(username + ":" + password));
+
+      // (async () => {
+      //     try {
+      //       const response = await fetch(url, {
+      //       method: 'GET',
+      //       headers: headers
+      //       });
+
+      //       console.log("response is", response);
+      //       if (response.status === 200) {
+      //         window.location.href = url;
+      //       }
+      //     } catch (error) {
+      //       console.log("An error occured in form submission");
+      //     }
+          
+      //   })(url, headers);
+
+      // // fetch(url, {method:'GET',
+      // //         headers: headers,
+      // //       })
+      // // .then(response => {
+      // //   if (!response.ok) throw new Error(response.status);
+      // //   return response.json();})
+      // // .then(data => {console.log("Data is", data)})
+      // // // .catch(err => {console.log("Error is", err)})
+      
+    }
+  }
+  userForm();
+  
+</script>
